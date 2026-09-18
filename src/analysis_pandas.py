@@ -38,3 +38,17 @@ def monthly_revenue(data):
     return (
         data.groupby(data["data"].dt.to_period("M"))["revenue"].sum().reset_index()
     )
+
+
+if __name__ == "__main__":
+    print("\n**** Revenue per category ****")
+    print(revenue_by_category(_load_data))
+
+    print("\n**** Category summary ****")
+    print(category_summary(_load_data))
+
+    print("\n**** Revenue per city and category ****")
+    print(city_category_revenue(_load_data))
+
+    print("\n**** Monthly revenue ****")
+    print(monthly_revenue(_load_data))

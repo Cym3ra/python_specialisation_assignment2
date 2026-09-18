@@ -81,3 +81,16 @@ def monthly_revenue():
         ORDER BY month
         """).df()
 
+
+if __name__ == "__main__":
+    print("\n---- Revenue per category ----")
+    print(revenue_by_category())
+
+    print("\n---- Category summary ----")
+    print(category_summary())
+
+    print("\n---- Revenue per city and category ----")
+    print(city_category_revenue())
+
+    print("\n---- Monthly revenue ----")
+    print(monthly_revenue())

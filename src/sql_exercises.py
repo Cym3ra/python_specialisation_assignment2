@@ -57,3 +57,67 @@ def category_statistics():
         GROUP BY category
         ORDER BY total_revenue DESC
     """)
+
+def revenue_categories():
+    return duckdb.sql(f"""
+        SELECT
+            category,
+            SUM(revenue) AS total_revenue
+        FROM '{DATA_FILE}' 
+        GROUP BY category
+        HAVING SUM(revenue) > 5000
+        ORDER BY total_revenue DESC
+    """)
+
+def sort_order_size():
+    return duckdb.sql(f"""
+        SELECT
+            order_id,
+            revenue,
+            CASE
+                WHEN revenue >= 1000 THEN 'High'
+                WHEN revenue >= 500 THEN 'Medium'
+                ELSE 'Low' 
+            END AS order_size
+        FROM '{DATA_FILE}' 
+    """)
+
+def city_monthly_revenue():
+    return duckdb.sql(f"""
+        SELECT
+            DATE_TRUNC('Month', date) AS month,
+            city,
+            SUM(revenue) AS revenue
+        FROM '{DATA_FILE}' 
+        GROUP BY month, city
+        ORDER BY month, revenue DESC
+    """)
+
+
+if __name__ == "__main__":
+    print("\n<--- Categories --->")
+    print(show_categories())
+
+    print("\n<--- Number of orders --->")
+    print(count_orders())
+
+    print("\n<--- Average revenue --->")
+    print(average_revenue())
+
+    print("\n<--- Top 10 orders --->")
+    print(top_orders())
+
+    print("\n<--- Revenue by city --->")
+    print(revenue_by_city())
+
+    print("\n<--- Category statistics --->")
+    print(category_statistics())
+
+    print("\n<--- Categories over 5000 --->")
+    print(revenue_categories())
+
+    print("\n<--- Order sizes --->")
+    print(sort_order_size())
+
+    print("\n<--- Monthly revenue per city --->")
+    print(city_monthly_revenue())

@@ -42,13 +42,13 @@ def monthly_revenue(data):
 
 if __name__ == "__main__":
     print("\n**** Revenue per category ****")
-    print(revenue_by_category(_load_data))
+    print(revenue_by_category(load_data))
 
     print("\n**** Category summary ****")
-    print(category_summary(_load_data))
+    print(category_summary(load_data))
 
     print("\n**** Revenue per city and category ****")
-    print(city_category_revenue(_load_data))
+    print(city_category_revenue(load_data))
 
     print("\n**** Monthly revenue ****")
-    print(monthly_revenue(_load_data))
+    print(monthly_revenue(load_data))

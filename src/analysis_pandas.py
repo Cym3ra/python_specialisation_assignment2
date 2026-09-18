@@ -1,11 +1,40 @@
 import pandas as pd
 
-data = pd.read_csv("data/ecommerce_sales.csv")
+DATA_FILE = "data/ecommerce_sales.csv"
 
-result = (
-    data.groupby("category")["revenue"]
-    .sum()
-    .sort_values(ascending=False)
-)
+def _load_data() -> pd.DataFrame:
+    return pd.read_csv(DATA_FILE)
 
-print(result)
+
+def revenue_by_category(data):
+    return (
+        data.groupby("category", as_index=False)["revenue"].sum()
+        .rename(columns={"revenue": "total_revenue"})
+        .sort_values("total_revenue", ascending=False)
+    )
+
+def category_summary(data):
+    return(
+        data.groupby("category")
+        .agg(
+            orders=("order_id", "count"),
+            units=("units", "sum"),
+            revenue=("revenue", "sum"),
+            average_revenue=("revenue", "mean"),
+            ).reset_index().sort_values("revenue", ascending=False)
+    )
+
+def city_category_revenue(data):
+    return(
+        data.groupby(["city", "category"], as_index=False)["revenue"]
+        .sum().sort_values("revenue", ascending=False)
+    )
+
+def monthly_revenue(data):
+    data = data.copy()
+
+    data["date"] = pd.to_datetime(data["date"])
+
+    return (
+        data.groupby(data["data"].dt.to_period("M"))["revenue"].sum().reset_index()
+    )

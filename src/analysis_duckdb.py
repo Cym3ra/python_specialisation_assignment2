@@ -1,6 +1,6 @@
 import duckdb
 
-duckdb.read_csv("data/ecommerce_sales.csv")
+DATA_FILE = "data/ecommerce_sales.csv"
 
 #duckdb.sql("SELECT * FROM 'data/ecommerce_sales.csv'")
 
@@ -36,3 +36,48 @@ result = duckdb.sql("""
 
 
 print(result)
+
+def revenue_by_category():
+    return duckdb.sql(f"""
+        SELECT
+            category,
+            SUM(revenue) AS total_revenue
+        FROM '{DATA_FILE}'
+        GROUP BY category
+        ORDER BY total_revenue DESC
+        """).df()
+
+def category_summary():
+    return duckdb.sql(f"""
+        SELECT
+            category,
+            COUNT(order_id) AS orders,
+            SUM(units) AS units,
+            SUM(revenue) AS revenue,
+            AVG(revenue) AS average_revenue
+        FROM '{DATA_FILE}'
+        GROUP BY category
+        ORDER BY revenue DESC
+        """).df()
+
+def city_category_revenue():
+    return duckdb.sql(f"""
+        SELECT
+            city,
+            category,
+            SUM(revenue) AS revenue
+        FROM '{DATA_FILE}'
+        GROUP BY city, category
+        ORDER BY revenue DESC
+        """).df()
+
+def monthly_revenue():
+    return duckdb.sql(f"""
+        SELECT
+            DATE_TRUNC('month', date) AS month
+            SUM(revenue) AS revenue
+        FROM '{DATA_FILE}'
+        GROUP BY month
+        ORDER BY month
+        """).df()
+

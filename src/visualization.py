@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 DATA_FILE = "data/ecommerce_sales.csv"
 
 def create_revenue_chart():
-    result = duckdb.sql(f"""
+    con = duckdb.connect()
+    result = con.execute(f"""
         SELECT
             category,
             SUM(revenue) AS revenue

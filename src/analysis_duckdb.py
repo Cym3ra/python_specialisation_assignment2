@@ -2,43 +2,14 @@ import duckdb
 
 DATA_FILE = "data/ecommerce_sales.csv"
 
-#duckdb.sql("SELECT * FROM 'data/ecommerce_sales.csv'")
 
-#duckdb.sql("SELECT 42").show()
-
-# result = duckdb.sql("""
-#     SELECT *
-#     FROM 'data/ecommerce_sales.csv'
-# """)
-
-# print(result)
-
-# result = duckdb.sql("""
-#     SELECT
-#         category,
-#         SUM(units * price) AS total_sales
-#     FROM 'data/ecommerce_sales.csv'
-#     GROUP BY category
-#     ORDER BY total_sales DESC
-# """)
-
-# print(result.df())
-
-result = duckdb.sql("""
-    SELECT
-        category,
-        SUM(units) AS quantity,
-        SUM(revenue) AS revenue
-    FROM 'data/ecommerce_sales.csv'
-    WHERE units > 0
-    GROUP BY category
-""")
+def create_connection():
+    return duckdb.connect()
 
 
-print(result)
+def revenue_by_category(con):
 
-def revenue_by_category():
-    return duckdb.sql(f"""
+    return con.execute(f"""
         SELECT
             category,
             SUM(revenue) AS total_revenue
@@ -47,8 +18,9 @@ def revenue_by_category():
         ORDER BY total_revenue DESC
         """).df()
 
-def category_summary():
-    return duckdb.sql(f"""
+def category_summary(con):
+    
+    return con.execute(f"""
         SELECT
             category,
             COUNT(order_id) AS orders,
@@ -60,8 +32,9 @@ def category_summary():
         ORDER BY revenue DESC
         """).df()
 
-def city_category_revenue():
-    return duckdb.sql(f"""
+def city_category_revenue(con):
+
+    return con.execute(f"""
         SELECT
             city,
             category,
@@ -71,8 +44,9 @@ def city_category_revenue():
         ORDER BY revenue DESC
         """).df()
 
-def monthly_revenue():
-    return duckdb.sql(f"""
+def monthly_revenue(con):
+
+    return con.execute(f"""
         SELECT
             DATE_TRUNC('month', date) AS month
             SUM(revenue) AS revenue
@@ -84,13 +58,13 @@ def monthly_revenue():
 
 if __name__ == "__main__":
     print("\n---- Revenue per category ----")
-    print(revenue_by_category())
+    print(revenue_by_category(create_connection()))
 
     print("\n---- Category summary ----")
-    print(category_summary())
+    print(category_summary(create_connection()))
 
     print("\n---- Revenue per city and category ----")
-    print(city_category_revenue())
+    print(city_category_revenue(create_connection()))
 
     print("\n---- Monthly revenue ----")
-    print(monthly_revenue())
+    print(monthly_revenue(create_connection()))

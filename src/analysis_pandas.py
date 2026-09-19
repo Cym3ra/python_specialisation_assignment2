@@ -36,7 +36,7 @@ def monthly_revenue(data):
     data["date"] = pd.to_datetime(data["date"])
 
     return (
-        data.groupby(data["data"].dt.to_period("M"))["revenue"].sum().reset_index()
+        data.groupby(data["date"].dt.to_period("M"))["revenue"].sum().reset_index()
     )
 
 

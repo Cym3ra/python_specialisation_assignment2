@@ -1,6 +1,6 @@
 import pandas as pd
 
-DATA_FILE = "data/ecommerce_sales.csv"
+DATA_FILE = "data/ecommerce_sales_100k.csv"
 
 def load_data() -> pd.DataFrame:
     return pd.read_csv(DATA_FILE)
@@ -41,14 +41,16 @@ def monthly_revenue(data):
 
 
 if __name__ == "__main__":
+    data = load_data()
+
     print("\n**** Revenue per category ****")
-    print(revenue_by_category(load_data))
+    print(revenue_by_category(data))
 
     print("\n**** Category summary ****")
-    print(category_summary(load_data))
+    print(category_summary(data))
 
     print("\n**** Revenue per city and category ****")
-    print(city_category_revenue(load_data))
+    print(city_category_revenue(data))
 
     print("\n**** Monthly revenue ****")
-    print(monthly_revenue(load_data))
+    print(monthly_revenue(data))

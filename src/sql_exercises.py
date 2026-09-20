@@ -1,6 +1,6 @@
 import duckdb
 
-DATA_FILE = "data/ecommerce_sales.csv"
+DATA_FILE = "data/ecommerce_sales_100k.csv"
 
 def show_categories():
     return duckdb.sql(f"""
@@ -12,7 +12,7 @@ def show_categories():
 def count_orders():
     return duckdb.sql(f"""
         SELECT COUNT(*) AS number_of_orders
-        FROM '{DATA_FILE}
+        FROM '{DATA_FILE}'
     """)
 
 def average_revenue():

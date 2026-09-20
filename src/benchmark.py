@@ -1,8 +1,7 @@
 import time
 import statistics
-
+import matplotlib.pyplot as plt
 import pandas as pd
-import duckdb
 
 from analysis_pandas import (
     load_data,
@@ -12,6 +11,7 @@ from analysis_pandas import (
 )
 
 from analysis_duckdb import (
+    create_connection,
     revenue_by_category as duckdb_revenue_by_category,
     category_summary as duckdb_category_summary,
     monthly_revenue as duckdb_monthly_revenue,
@@ -36,22 +36,23 @@ def measure(function, number_of_runs=NUMBER_OF_RUNS):
 
 def run_benchmark():
     data = load_data()
+    con = create_connection()
 
     tests = [
         (
             "Revenue per category",
             lambda: pandas_revenue_by_category(data),
-            duckdb_revenue_by_category,
+            lambda: duckdb_revenue_by_category(con),
         ),
         (
             "Category summary",
             lambda: pandas_category_summary(data),
-            duckdb_category_summary,
+            lambda: duckdb_category_summary(con),
         ),
         (
             "Monthly revenue",
             lambda: pandas_monthly_revenue(data),
-            duckdb_monthly_revenue,
+            lambda: duckdb_monthly_revenue(con),
         ),
     ]
 
@@ -72,6 +73,22 @@ def run_benchmark():
     return pd.DataFrame(results)
 
 
+def plot_results(df: pd.DataFrame, out_path: str = "results/benchmark_tid.png") -> None:
+    plot_df = df.set_index("test")[["pandas_seconds", "duckdb_seconds"]]
+    plot_df.columns = ["Pandas", "DuckDB"]
+
+    ax = plot_df.plot(kind="bar", figsize=(8, 5))
+    ax.set_ylabel("Tid (sekunder)")
+    ax.set_title("Pandas vs DuckDB – körtid per fråga (median av 10 körningar)")
+    ax.legend(title="Metod")
+    plt.xticks(rotation=0)
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=150)
+
+    print(f"Diagram sparat till {out_path}")
+
+
+
 if __name__ == "__main__":
     results = run_benchmark()
 
@@ -83,3 +100,5 @@ if __name__ == "__main__":
     )
 
     print("\nBenchmark sparat till results/benchmark_results.csv")
+
+    plot_results(results)

@@ -1,10 +1,14 @@
 import duckdb
 import matplotlib.pyplot as plt
 
-DATA_FILE = "data/ecommerce_sales.csv"
+from src.analysis_duckdb import create_connection
+
+#py -m src.visualization
+
+DATA_FILE = "data/ecommerce_sales_100k.csv"
 
 def create_revenue_chart():
-    con = duckdb.connect()
+    con = create_connection()
     result = con.execute(f"""
         SELECT
             category,

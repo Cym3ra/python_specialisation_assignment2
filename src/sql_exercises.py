@@ -1,6 +1,6 @@
 import duckdb
 
-DATA_FILE = "data/ecommerce_sales_100k.csv"
+DATA_FILE = "data/ecommerce_sales.csv"
 
 def show_categories():
     return duckdb.sql(f"""

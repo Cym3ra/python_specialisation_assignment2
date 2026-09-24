@@ -1,9 +1,12 @@
-import duckdb
 import matplotlib.pyplot as plt
 
 from src.analysis_duckdb import create_connection
 
-#py -m src.visualization
+"""
+För att köra filen - från projektets rotmapp:
+    py -m src.visualization
+"""
+
 
 DATA_FILE = "data/ecommerce_sales_100k.csv"
 

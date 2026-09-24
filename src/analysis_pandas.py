@@ -1,6 +1,6 @@
 import pandas as pd
 
-DATA_FILE = "data/ecommerce_sales_100k.csv"
+DATA_FILE = "data/ecommerce_sales.csv"
 
 def load_data() -> pd.DataFrame:
     return pd.read_csv(DATA_FILE)
